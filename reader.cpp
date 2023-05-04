@@ -17,8 +17,8 @@ int main(int argc, char *argv[]) {
     if (argc == 2) {
         if (input_string.compare("--help") == 0) {
             std::cout << "CAFFER: Crysys CAFF and CIFF converter" << std::endl;
-            std::cout << "usage: reader [--ciff|--caff] [target_file]" << std::endl;
-            std::cout << "\tCommand Summary" << std::endl;
+            std::cout << "usage: reader [--ciff | --caff] [target_file]" << std::endl << std::endl;
+            std::cout << "\tCommand Summary:" << std::endl << std::endl;
             std::cout << "\t\t--ciff target_file \t|\tRead CIFF target_file and exports it to a JPEG file" << std::endl;
             std::cout << "\t\t--caff target_file \t|\tRead CAFF target_file and exports the first image to a JPEG file"<< std::endl;
             std::cout << "\t\t--help \t\t\t|\tThis help message" << std::endl;
@@ -69,5 +69,7 @@ int main(int argc, char *argv[]) {
         progress += 0.16; // for demonstration only
     }
     std::cout << std::endl;*/
+     //TODO: makefile -> name has tobe parser!!
+     //TODO: Handle empty file, not existing file, smaller than magic files etc...
     return -1;
 }
