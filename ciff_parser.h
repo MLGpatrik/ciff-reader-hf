@@ -6,11 +6,23 @@
 #include "parser.h"
 
 using namespace std;
-
 class CIFF_parser : public Parser{
 public:
     CIFF_parser(std::string path): Parser(path){
     }
+
+    int search_for_newline(std::vector<unsigned char> buffer, int from=36){
+        int counter=0;
+        for(int i=from;i<buffer.size();i++){
+            if(buffer[i] == '\n'){
+                break;
+            }
+            counter++;
+        }
+        return counter;
+    }
+
+    void write_jpeg_file(unsigned char* rgb_data, int width, int height, const char* filename, int quality);
 
     int parse() override{
         cout << "Parsing the file: " << this->path << endl;
@@ -75,18 +87,28 @@ public:
             std::cerr << "Content size doesn't match with dimensions!" << std::endl;
             return -1;
         }
+
         // Read caption
+        std::vector<unsigned char>* caption = this->read_header(buffer,36,search_for_newline(buffer,36));
+        caption->push_back('\0');
 
         // Read tags
 
+        std::vector<unsigned char>* tags = this->read_header(buffer,36+caption->size(),header_size-36+caption->size()); // +1 is the \n it's not in the caption vector
+
         // Read image?
-        //TODO: make file read a seperate thing to make work it with CAFF
+        //unsigned char r[image_width * image_height];  // red
+        //unsigned char g[image_width * image_height];  // green
+        //unsigned char b[image_width * image_height];  // blue
+        //std::ptrdiff_t rows = image_height;
+
+
+
+        //TODO: make file read a separate thing to make work it with CAFF
         return 0;
     }
+
+
 };
-
-std::vector<unsigned char>* readCaption(std::vector<unsigned char> buffer){
-
-}
 
 #endif //CIFF_READER_HF_CIFF_PARSER_H
