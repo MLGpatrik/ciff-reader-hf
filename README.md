@@ -10,7 +10,7 @@
 
 
 Requirements:
- - Ubuntu 20.24 LTS
+ - Ubuntu 22.04 LTS
  - libjpeg-dev
  - make
  - g++
