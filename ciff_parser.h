@@ -13,7 +13,7 @@ public:
 
     int search_for_newline(std::vector<unsigned char> buffer, int from=36){
         int counter=0;
-        for(int i=from;i<buffer.size();i++){
+        for(long unsigned int i=from;i<buffer.size();i++){
             if(buffer[i] == '\n'){
                 break;
             }
@@ -22,7 +22,36 @@ public:
         return counter;
     }
 
-    void write_jpeg_file(unsigned char* rgb_data, int width, int height, const char* filename, int quality);
+    std::vector<unsigned char>* read_RGB_value(std::vector<unsigned char> buffer, int column, int row, int width, int offset){
+        std::vector<unsigned char>* color_buffer = new std::vector<unsigned char>;
+        if((long unsigned int)(offset + (row * width + column)*3 + 2) >= buffer.size()){
+            std::cerr << "The summ is: " << (offset + (row * width + column)*3 + 2) << " The column is: " << column << " The row is: " << row << std::endl;
+            throw new std::out_of_range("Too long read!");
+        }
+        color_buffer->push_back(buffer[offset + (row * width + column) * 3]);        // R
+        color_buffer->push_back(buffer[offset + (row * width + column) * 3 + 1]) ;   // G
+        color_buffer->push_back(buffer[offset + (row * width + column) * 3 + 2]) ;   // B
+        return color_buffer;
+    }
+
+    //void write_jpeg_file(unsigned char* rgb_data, int width, int height, const char* filename, int quality);
+    void write_jpeg_image(const char* filename, unsigned char* rgb_buffer, int width, int height, int quality);
+
+
+    void print_progress(float progress,float max_progress){
+        int barWidth = 70;
+
+            std::cout << "[";
+            int pos = barWidth * (progress/max_progress);
+            for (int i = 0; i < barWidth; ++i) {
+                if (i < pos) std::cout << "=";
+                else if (i == pos) std::cout << ">";
+                else std::cout << " ";
+            }
+            std::cout << "] " << ((progress/max_progress)* 100.0) << " %           \r";
+            std::cout.flush();
+            //std::cout << std::endl;
+    }
 
     int parse() override{
         cout << "Parsing the file: " << this->path << endl;
@@ -50,7 +79,7 @@ public:
 
         int header_size = this->ByteToInteger(*header_size_vector);
         std::cout << "Header size: " << header_size << std::endl;
-        if(header_size < 36 || header_size >= buffer.size()){
+        if(header_size < 36 || (long unsigned int) header_size >= buffer.size()){
             std::cerr << "Invalid header size!" << std::endl;
             return -1;
         }
@@ -96,15 +125,52 @@ public:
 
         std::vector<unsigned char>* tags = this->read_header(buffer,36+caption->size(),header_size-36+caption->size()); // +1 is the \n it's not in the caption vector
 
+        std::cout << "Tags first letter: " << tags->at(0) << std::endl;
         // Read image?
         //unsigned char r[image_width * image_height];  // red
         //unsigned char g[image_width * image_height];  // green
         //unsigned char b[image_width * image_height];  // blue
         //std::ptrdiff_t rows = image_height;
 
+        // Allocate memory for the RGB buffer
+        std::cout << "The size of the file is: " << buffer.size() << std::endl;
+
+        unsigned char* rgb_buffer = new unsigned char[image_width * image_height * 3];
 
 
+        //(std::vector<unsigned char> buffer, int column, int row, int width, int height, int offset)
+        // Fill the RGB buffer with pixel values
+        for (int y = 0; y < image_height; ++y) {
+            
+            
+             // for demonstration only
+            for (int x = 0; x < image_width; ++x) {                
+                int index = (y * image_width + x) * 3;
+                std::vector<unsigned char>* color_at_position = this->read_RGB_value(buffer,x,y,image_width,header_size);
+                rgb_buffer[index] = color_at_position->at(0);
+                rgb_buffer[index + 1] = color_at_position->at(1);
+                rgb_buffer[index + 2] = color_at_position->at(2);
+                
+                //std::cout << "The first character: " << color_at_position->at(0) << std::endl;
+                //break;
+            }            
+            print_progress((float)y,(float)image_height);
+            break;
+            //break; //TODO: remove this
+        }
+
+        std::cout << std::endl;
+        std::cout << "Writing to file..." << std::endl;
+        write_jpeg_image("output.jpg", rgb_buffer, image_width, image_height, 90);
+
+        delete[] rgb_buffer;
+
+
+
+        //header_size_vector = null;
+        //TODO: filename same as the original filename + jpg
         //TODO: make file read a separate thing to make work it with CAFF
+        //TODO: delte unused stuff
         return 0;
     }
 

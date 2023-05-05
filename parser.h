@@ -31,7 +31,7 @@ protected:
     int ByteToInteger(std::vector<unsigned char> buffer){
         unsigned int counter = 0;
 
-        for (int i = 0; i < buffer.size(); i++) {
+        for (long unsigned int i = 0; i < buffer.size(); i++) {
             counter = (counter << 8) | buffer.at(i);
         }
         return counter;
