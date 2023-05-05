@@ -1,5 +1,8 @@
 #include "ciff_parser.h"
-#include "jpeg/jpeglib.h"
+#include <jpeglib.h>
+
+
+
 
 /*void CIFF_parser::write_jpeg_file(unsigned char* rgb_data, int width, int height, const char* filename, int quality){
     struct jpeg_compress_struct cinfo;
