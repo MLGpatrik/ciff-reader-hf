@@ -126,11 +126,7 @@ public:
         std::vector<unsigned char>* tags = this->read_header(buffer,36+caption->size(),header_size-36+caption->size()); // +1 is the \n it's not in the caption vector
 
         std::cout << "Tags first letter: " << tags->at(0) << std::endl;
-        // Read image?
-        //unsigned char r[image_width * image_height];  // red
-        //unsigned char g[image_width * image_height];  // green
-        //unsigned char b[image_width * image_height];  // blue
-        //std::ptrdiff_t rows = image_height;
+
 
         // Allocate memory for the RGB buffer
         std::cout << "The size of the file is: " << buffer.size() << std::endl;
