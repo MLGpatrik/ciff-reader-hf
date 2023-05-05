@@ -2,6 +2,8 @@
 #define CIFF_READER_HF_PARSER_H
 #include <iostream>
 #include <vector>
+#include <algorithm>
+
 
 class Parser {
 protected:
@@ -30,7 +32,7 @@ protected:
      */
     int ByteToInteger(std::vector<unsigned char> buffer){
         unsigned int counter = 0;
-
+        std::reverse(buffer.begin(), buffer.end());
         for (long unsigned int i = 0; i < buffer.size(); i++) {
             counter = (counter << 8) | buffer.at(i);
         }
