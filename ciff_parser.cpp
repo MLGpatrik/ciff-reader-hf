@@ -1,14 +1,15 @@
 #include "ciff_parser.h"
 #include <jpeglib.h>
 #include <cstdio>
+#include <cstring> // TODO: DELETE
 
-void CIFF_parser::write_jpeg_image(const char* filename, unsigned char* rgb_buffer, int width, int height, int quality)
+int CIFF_parser::write_jpeg_image(const char* filename, unsigned char* rgb_buffer, int width, int height, int quality)
 {
     // Step 1: Create a file pointer and open the output file
     FILE* outfile = fopen(filename, "wb");
     if (!outfile) {
-        fprintf(stderr, "Error opening output file %s\n", filename);
-        return;
+        std::cerr << "Error opening output file" << std::endl;
+        return -1;
     }
 
     // Step 2: Initialize the JPEG compression parameters
@@ -27,6 +28,10 @@ void CIFF_parser::write_jpeg_image(const char* filename, unsigned char* rgb_buff
     // Step 3: Start the JPEG compression process
     jpeg_start_compress(&cinfo, TRUE);
 
+    // Add caption
+    char *text = "Hello, world!";
+    jpeg_write_marker(&cinfo, JPEG_COM, (const JOCTET *)text, strlen(text));
+
     // Step 4: Write the image data to the JPEG file
     JSAMPLE* row_pointer[1];
     while (cinfo.next_scanline < cinfo.image_height) {
@@ -39,6 +44,8 @@ void CIFF_parser::write_jpeg_image(const char* filename, unsigned char* rgb_buff
     jpeg_finish_compress(&cinfo);
     fclose(outfile);
     jpeg_destroy_compress(&cinfo);
+
+    return 0;
 }
 
 

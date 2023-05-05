@@ -35,7 +35,7 @@ public:
     }
 
     //void write_jpeg_file(unsigned char* rgb_data, int width, int height, const char* filename, int quality);
-    void write_jpeg_image(const char* filename, unsigned char* rgb_buffer, int width, int height, int quality);
+    int write_jpeg_image(const char* filename, unsigned char* rgb_buffer, int width, int height, int quality);
 
 
     void print_progress(float progress,float max_progress){
@@ -136,32 +136,27 @@ public:
         std::cout << "The size of the file is: " << buffer.size() << std::endl;
 
         unsigned char* rgb_buffer = new unsigned char[image_width * image_height * 3];
-
-
-        //(std::vector<unsigned char> buffer, int column, int row, int width, int height, int offset)
-        // Fill the RGB buffer with pixel values
-        for (int y = 0; y < image_height; ++y) {
-            
-            
-             // for demonstration only
-            for (int x = 0; x < image_width; ++x) {                
-                int index = (y * image_width + x) * 3;
-                std::vector<unsigned char>* color_at_position = this->read_RGB_value(buffer,x,y,image_width,header_size);
-                rgb_buffer[index] = color_at_position->at(0);
-                rgb_buffer[index + 1] = color_at_position->at(1);
-                rgb_buffer[index + 2] = color_at_position->at(2);
-                
+        
+        
+        int y = 0;
+        for (int x = 0; x < image_width; ++x) {                
+            int index = (y * image_width + x) * 3;
+            std::vector<unsigned char>* color_at_position = this->read_RGB_value(buffer,x,y,image_width,header_size);
+            rgb_buffer[index] = color_at_position->at(0);
+            rgb_buffer[index + 1] = color_at_position->at(1);
+            rgb_buffer[index + 2] = color_at_position->at(2);
+              
+            print_progress((float)x,(float)image_width);    
                 //std::cout << "The first character: " << color_at_position->at(0) << std::endl;
                 //break;
-            }            
-            print_progress((float)y,(float)image_height);
-            break;
+        }                        
+        
             //break; //TODO: remove this
-        }
+        //}
 
         std::cout << std::endl;
         std::cout << "Writing to file..." << std::endl;
-        write_jpeg_image("output.jpg", rgb_buffer, image_width, image_height, 90);
+        int ret_value = write_jpeg_image("output3.jpg", rgb_buffer, image_width, image_height, 90);
 
         delete[] rgb_buffer;
 
@@ -171,7 +166,7 @@ public:
         //TODO: filename same as the original filename + jpg
         //TODO: make file read a separate thing to make work it with CAFF
         //TODO: delte unused stuff
-        return 0;
+        return ret_value;
     }
 
 
