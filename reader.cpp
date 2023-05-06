@@ -2,6 +2,10 @@
 #include "parser.h"
 #include "ciff_parser.h"
 
+
+#define MEMTRACE
+
+#include "memtrace.h"
 using namespace std;
 
 int main(int argc, char *argv[]) {    
@@ -40,13 +44,15 @@ int main(int argc, char *argv[]) {
         std::cout << "You have given too much parameters" << std::endl;
         return -1;
     }
-
     string target_file_path = argv[2];
-    Parser *parser;
+    Parser* parser;
     if (input_string.compare("--ciff") == 0) {
         std::cout << "Converting CIFF to jpeg..." << std::endl;
         parser = new CIFF_parser(target_file_path);
-        return parser->parse();
+        int ret_val = parser->parse();
+        //delete parser; //TODO: uncomment this!
+        //TODO: remove memtrace
+        return ret_val;
     } else {
         if (input_string.compare("--caff") == 0) {
             std::cout << "Converting CAFF to jpeg" << std::endl;
@@ -56,24 +62,8 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    /*float progress = 0.0;
-    while (progress <= 1.0) {
-        int barWidth = 70;
-
-        std::cout << "[";
-        int pos = barWidth * progress;
-        for (int i = 0; i < barWidth; ++i) {
-            if (i < pos) std::cout << "=";
-            else if (i == pos) std::cout << ">";
-            else std::cout << " ";
-        }
-        std::cout << "] " << int(progress * 100.0) << " %\r";
-        std::cout.flush();
-
-        progress += 0.16; // for demonstration only
-    }
-    std::cout << std::endl;*/
      //TODO: makefile -> name has tobe parser!!
      //TODO: Handle empty file, not existing file, smaller than magic files etc...
+
     return -1;
 }

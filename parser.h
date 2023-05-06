@@ -1,9 +1,10 @@
 #ifndef CIFF_READER_HF_PARSER_H
 #define CIFF_READER_HF_PARSER_H
+#define MEMTRACE
 #include <iostream>
 #include <vector>
 #include <algorithm>
-
+#include "memtrace.h"
 
 class Parser {
 protected:
@@ -37,6 +38,24 @@ protected:
             counter = (counter << 8) | buffer.at(i);
         }
         return counter;
+    }
+
+    /**
+     * Prints a progressbar
+     * @param progress The current progress value
+     * @param max_progress The maximum progress value (where the 100% is)
+     */
+    void print_progress(float progress,float max_progress){
+        int barWidth = 60;
+        std::cout << "[";
+        int pos = barWidth * (progress/max_progress);
+        for (int i = 0; i < barWidth; ++i) {
+            if (i < pos) std::cout << "=";
+            else if (i == pos) std::cout << ">";
+            else std::cout << " ";
+        }
+        std::cout << "] " << ((progress/max_progress)* 100.0) << " %           \r";
+        std::cout.flush();
     }
 public:
     /**

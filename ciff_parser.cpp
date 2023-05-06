@@ -1,18 +1,18 @@
 #include "ciff_parser.h"
 #include <jpeglib.h>
-#include <cstdio>
-#include <cstring> // TODO: DELETE
+#define MEMTRACE
+#include "memtrace.h"
 
-int CIFF_parser::write_jpeg_image(const char* filename, unsigned char* rgb_buffer, int width, int height, int quality)
+int CIFF_parser::write_jpeg_image(const char* filename, unsigned char* rgb_buffer, int width, int height)
 {
-    // Step 1: Create a file pointer and open the output file
+    // Create a file pointer and open the output file
     FILE* outfile = fopen(filename, "wb");
     if (!outfile) {
         std::cerr << "Error opening output file" << std::endl;
         return -1;
     }
 
-    // Step 2: Initialize the JPEG compression parameters
+    // Initialize the JPEG compression parameters
     jpeg_compress_struct cinfo;
     jpeg_error_mgr jerr;
     cinfo.err = jpeg_std_error(&jerr);
@@ -23,16 +23,11 @@ int CIFF_parser::write_jpeg_image(const char* filename, unsigned char* rgb_buffe
     cinfo.input_components = 3;
     cinfo.in_color_space = JCS_RGB;
     jpeg_set_defaults(&cinfo);
-    jpeg_set_quality(&cinfo, quality, TRUE);
 
-    // Step 3: Start the JPEG compression process
+    // Start the JPEG compression process
     jpeg_start_compress(&cinfo, TRUE);
 
-    // Add caption
-    char *text = "Hello, world!";
-    jpeg_write_marker(&cinfo, JPEG_COM, (const JOCTET *)text, strlen(text));
-
-    // Step 4: Write the image data to the JPEG file
+    // Write the image data to the JPEG file
     JSAMPLE* row_pointer[1];
     while (cinfo.next_scanline < cinfo.image_height) {
         int row = cinfo.next_scanline;
@@ -40,52 +35,10 @@ int CIFF_parser::write_jpeg_image(const char* filename, unsigned char* rgb_buffe
         jpeg_write_scanlines(&cinfo, row_pointer, 1);
     }
 
-    // Step 5: Finish the JPEG compression process
+    // Finish the JPEG compression process
     jpeg_finish_compress(&cinfo);
     fclose(outfile);
     jpeg_destroy_compress(&cinfo);
 
     return 0;
 }
-
-
-
-/*void CIFF_parser::write_jpeg_file(unsigned char* rgb_data, int width, int height, const char* filename, int quality){
-    struct jpeg_compress_struct cinfo;
-    struct jpeg_error_mgr jerr;
-
-    JSAMPROW row_pointer[1];
-    int row_stride;
-
-    cinfo.err = jpeg_std_error(&jerr);
-    jpeg_create_compress(&cinfo);
-
-    FILE* outfile = fopen(filename, "wb");
-    if (!outfile) {
-        fprintf(stderr, "Error opening output JPEG file %s\n", filename);
-        return;
-    }
-
-    jpeg_stdio_dest(&cinfo, outfile);
-
-    cinfo.image_width = width;
-    cinfo.image_height = height;
-    cinfo.input_components = 3;
-    cinfo.in_color_space = JCS_RGB;
-
-    jpeg_set_defaults(&cinfo);
-    jpeg_set_quality(&cinfo, quality, TRUE);
-
-    jpeg_start_compress(&cinfo, TRUE);
-
-    row_stride = width * 3;
-
-    while (cinfo.next_scanline < cinfo.image_height) {
-        row_pointer[0] = &rgb_data[cinfo.next_scanline * row_stride];
-        jpeg_write_scanlines(&cinfo, row_pointer, 1);
-    }
-
-    jpeg_finish_compress(&cinfo);
-    fclose(outfile);
-    jpeg_destroy_compress(&cinfo);
-}*/

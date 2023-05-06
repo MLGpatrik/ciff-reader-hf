@@ -1,10 +1,10 @@
 CC = g++
-CFLAGS = -Wall -Wextra -pedantic -std=c++11
+CFLAGS = -Wall -Wextra -pedantic -std=c++20
 LIBS = -ljpeg
-
+CPPFLAGS += -DMEMTRACE
 # Define the source files
-SRC = ciff_parser.cpp parser.cpp reader.cpp
-HDR = ciff_parser.h parser.h
+SRC = ciff_parser.cpp parser.cpp reader.cpp memtrace.cpp
+HDR = ciff_parser.h parser.h memtrace.h
 
 # Define the object files
 OBJ = $(SRC:.cpp=.o)
