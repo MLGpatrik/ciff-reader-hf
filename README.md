@@ -39,8 +39,6 @@ make
 
 Done!
 
-## Usage
-
 ## Informations
 
-Runs very slow in MacOS for some reason, but works great on linux and windows.
+Runs very slowly on macOS for some reason, but works great on linux and windows.
