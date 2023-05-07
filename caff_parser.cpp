@@ -1,6 +1,5 @@
 #include "caff_parser.h"
-#define MEMTRACE
-#include "memtrace.h"
+
 
 std::vector<unsigned char>* CAFF_parser::get_block(std::vector<unsigned char> buffer,int from){
     get_block_id(buffer,from);
@@ -26,14 +25,14 @@ int CAFF_parser::get_block_length(std::vector<unsigned char> buffer,int from){
     clear_buffer_pointer(length_vec);
     std::cout << "The length is: " << data_size << std::endl;
 
-    if(data_size < 0 || (buffer.size()) < data_size){
+    if(data_size < 0 || (buffer.size()) < (unsigned int)data_size){
         throw std::out_of_range("Invalid data length!");
     }
     return data_size;
 }
 
 std::vector<unsigned char>* CAFF_parser::get_block_data(std::vector<unsigned char> buffer,int from,int length){
-    if(buffer.size() < from+length){
+    if(buffer.size() < (unsigned int)(from+length)){
         throw std::out_of_range("Too long block read!");
     }
     return read_header(buffer,from+9,length);
@@ -93,7 +92,7 @@ int CAFF_parser::parse_block(std::vector<unsigned char> buffer, int (CAFF_parser
     std::vector<unsigned char>* data = NULL;
     try{
         data = get_block(buffer,next);
-    }catch (std::out_of_range ex){
+    }catch (std::out_of_range const&){
         clear_buffer_pointer(data);
         buffer.clear();
         return -1;

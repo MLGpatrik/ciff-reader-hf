@@ -1,10 +1,8 @@
 #ifndef CIFF_READER_HF_PARSER_H
 #define CIFF_READER_HF_PARSER_H
-#define MEMTRACE
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include "memtrace.h"
 
 class Parser {
 protected:
@@ -24,7 +22,7 @@ protected:
      * @param count How many bytes to read
      * @return The byte vector, which contains the desired bytes
      */
-    std::vector<unsigned char>* read_header(std::vector<unsigned char> buffer,int from,int count);
+    std::vector<unsigned char>* read_header(std::vector<unsigned char> buffer,unsigned int from,unsigned int count);
 
     /**
      * Converts the hexadecimal numbers to integer
@@ -57,6 +55,8 @@ public:
      * @return If the return value is 0 then the parsing was successful, else it was unsuccessful
      */
     virtual int parse() = 0;
+
+    virtual ~Parser() = default;
 };
 
 

@@ -1,12 +1,10 @@
 #ifndef CIFF_READER_HF_CIFF_PARSER_H
 #define CIFF_READER_HF_CIFF_PARSER_H
-#define MEMTRACE
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include "parser.h"
 #include <filesystem>
-#include "memtrace.h"
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -15,12 +13,12 @@ class CIFF_parser : public Parser{
 private:
     std::vector<unsigned char>* buffer;
 public:
-    CIFF_parser(std::string path,std::vector<unsigned char>* buffer=NULL): Parser(path){
+    explicit CIFF_parser(std::string path,std::vector<unsigned char>* buffer=NULL): Parser(path){
         this->buffer = buffer;
     }
 
     /**
-     * Reads byte from the buffer until it finds a neline character (\n)
+     * Reads byte from the buffer until it finds a newline character (\n)
      * @param buffer The buffer which stores the characters
      * @param from Reads the characters from this index
      * @return The std::vector which holds the characters
@@ -34,7 +32,7 @@ public:
      * @param row  The pixel's y coordinate
      * @param width The width of the image
      * @param offset The offset of the RGB values in the buffer
-     * @return The std::vector which hold the RGB values for the pixel (The order is Red Grean Blue)
+     * @return The std::vector which hold the RGB values for the pixel (The order is Red Green Blue)
      */
     std::vector<unsigned char>* read_RGB_value(std::vector<unsigned char> buffer, int column, int row, int width, int offset);
 
@@ -44,7 +42,7 @@ public:
      * @param rgb_buffer The buffer which holds the RGB values
      * @param width The width of the image
      * @param height The height of the image
-     * @return If 0 the write the write was succesful otherwise it failed
+     * @return If 0 the write the write was successful otherwise it failed
      */
     int write_jpeg_image(const char* filename, unsigned char* rgb_buffer, int width, int height);
 
@@ -56,7 +54,6 @@ public:
         } else{
             cout << "Parsing CIFF image from CAFF file... " << endl;
         }
-        string line;
 
         if(buffer->size() < 36){
             clear_buffer_pointer(buffer);
@@ -130,7 +127,7 @@ public:
         std::cout << "The caption is: " << std::string(caption->begin(), caption->end()) << std::endl;
         // Read tags
 
-        std::vector<unsigned char>* tags = this->read_header(*buffer,36+caption->size(),header_size-36-caption->size()); // +1 is the \n it's not in the caption vector
+        std::vector<unsigned char>* tags = this->read_header(*buffer,(unsigned int)((unsigned int)36+caption->size()),(unsigned int)(header_size-(unsigned int)36-caption->size())); // +1 is the \n it's not in the caption vector
         clear_buffer_pointer(caption);
         std::cout << "Tags: " << std::string(tags->begin(), tags->end()) << std::endl;
         clear_buffer_pointer(tags);
@@ -161,7 +158,12 @@ public:
         std::cout << std::endl;
         std::cout << "Writing to file..." << std::endl;
         string filename = fs::path( this->path ).filename();
-        filename.replace(filename.size()-4,4,"jpg");
+        if((filename.find(string(".ciff")) != std::string::npos) || (filename.find(string(".caff")) != std::string::npos)){
+            filename.replace(filename.size()-4,4,"jpg");
+        }else{
+            filename.append(string(".jpg"));
+        }
+
         int ret_value = write_jpeg_image(filename.c_str(), rgb_buffer, image_width, image_height);
 
         delete[] rgb_buffer;
@@ -169,7 +171,6 @@ public:
         clear_buffer_pointer(buffer);
         return ret_value;
     }
-
 
 };
 

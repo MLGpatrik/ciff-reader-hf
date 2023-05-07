@@ -1,7 +1,5 @@
 #ifndef CIFF_READER_HF_CAFF_PARSER_H
 #define CIFF_READER_HF_CAFF_PARSER_H
-#define MEMTRACE
-#include "memtrace.h"
 #include "parser.h"
 #include <iostream>
 #include <vector>
@@ -94,10 +92,10 @@ public:
         std::vector<unsigned char>* data = NULL;
         int ret_val = 0;
         for(int i = 0; i < num_anim; i++){
-            if(next < buffer.size()){
+            if((unsigned int)next < buffer.size()){
                 try{
                     data = get_block(buffer,next);
-                }catch (std::out_of_range ex){
+                }catch (std::out_of_range const&){
                     buffer.clear();
                     return -1;
                 }

@@ -3,9 +3,6 @@
 #include "ciff_parser.h"
 #include "caff_parser.h"
 
-#define MEMTRACE
-
-#include "memtrace.h"
 using namespace std;
 
 int main(int argc, char *argv[]) {    
@@ -32,7 +29,7 @@ int main(int argc, char *argv[]) {
             std::cout << "\t\t--help \t\t\t|\tThis help message" << std::endl;
             return -1;
         } else {
-            std::cout << "Invalid paramaters, use --help to see the help" << std::endl;
+            std::cout << "Invalid parameters, use --help to see the help" << std::endl;
             return -1;
         }
     }
@@ -61,12 +58,9 @@ int main(int argc, char *argv[]) {
 
     if(parser != NULL){
         int ret_val = parser->parse();
-        //delete parser; //TODO: uncomment this!
+        delete parser;
         return ret_val;
     }
     return -1;
     //TODO: remove memtrace
-     //TODO: makefile -> name has tobe parser!!
-     //TODO: Handle empty file, not existing file, smaller than magic files etc...
-
 }

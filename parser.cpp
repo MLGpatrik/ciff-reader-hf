@@ -1,7 +1,6 @@
 #include "parser.h"
 #include <fstream>
-#define MEMTRACE
-#include "memtrace.h"
+
 using namespace std;
 
 Parser::Parser(std::string path) {
@@ -19,12 +18,12 @@ std::string Parser::read_magic(std::vector<unsigned char> buffer,int from){
     return the_magic;
 }
 
-std::vector<unsigned char>* Parser::read_header(std::vector<unsigned char> buffer,int from,int count){
+std::vector<unsigned char>* Parser::read_header(std::vector<unsigned char> buffer,unsigned int from,unsigned int count){
     if((long unsigned int)(from+count) > buffer.size()){
         throw std::out_of_range("Too long read!");
     }
     std::vector<unsigned char>* header_buffer = new std::vector<unsigned char>;
-    for(int i=from;i<from+count;i++){
+    for(unsigned int i=from;i<from+count;i++){
         header_buffer->push_back(buffer[i]);
     }
     return header_buffer;
