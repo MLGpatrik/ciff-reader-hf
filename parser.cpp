@@ -29,3 +29,31 @@ std::vector<unsigned char>* Parser::read_header(std::vector<unsigned char> buffe
     }
     return header_buffer;
 }
+
+int Parser::ByteToInteger(std::vector<unsigned char> buffer){
+    unsigned int counter = 0;
+    std::reverse(buffer.begin(), buffer.end());
+    for (long unsigned int i = 0; i < buffer.size(); i++) {
+        counter = (counter << 8) | buffer.at(i);
+    }
+    return counter;
+}
+
+void Parser::print_progress(float progress,float max_progress){
+    int barWidth = 60;
+    std::cout << "[";
+    int pos = barWidth * (progress/max_progress);
+    for (int i = 0; i < barWidth; ++i) {
+        if (i < pos) std::cout << "=";
+        else if (i == pos) std::cout << ">";
+        else std::cout << " ";
+    }
+    std::cout << "] " << ((progress/max_progress)* 100.0) << " %           \r";
+    std::cout.flush();
+}
+
+void Parser::clear_buffer_pointer(std::vector<unsigned char>* buffer){
+    buffer->clear();
+    delete buffer;
+    buffer = NULL;
+}

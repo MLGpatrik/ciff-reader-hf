@@ -31,32 +31,20 @@ protected:
      * @param buffer The buffer which holds the bytes
      * @return The value of the buffer
      */
-    int ByteToInteger(std::vector<unsigned char> buffer){
-        unsigned int counter = 0;
-        std::reverse(buffer.begin(), buffer.end());
-        for (long unsigned int i = 0; i < buffer.size(); i++) {
-            counter = (counter << 8) | buffer.at(i);
-        }
-        return counter;
-    }
+    int ByteToInteger(std::vector<unsigned char> buffer);
 
     /**
      * Prints a progressbar
      * @param progress The current progress value
      * @param max_progress The maximum progress value (where the 100% is)
      */
-    void print_progress(float progress,float max_progress){
-        int barWidth = 60;
-        std::cout << "[";
-        int pos = barWidth * (progress/max_progress);
-        for (int i = 0; i < barWidth; ++i) {
-            if (i < pos) std::cout << "=";
-            else if (i == pos) std::cout << ">";
-            else std::cout << " ";
-        }
-        std::cout << "] " << ((progress/max_progress)* 100.0) << " %           \r";
-        std::cout.flush();
-    }
+    void print_progress(float progress,float max_progress);
+
+    /**
+     * Clears the buffer and sets the pointer to NULL
+     * @param buffer The buffer to be cleared
+     */
+    void clear_buffer_pointer(std::vector<unsigned char>* buffer);
 public:
     /**
      * The constructor reads the file and saves the file handler in a variable
