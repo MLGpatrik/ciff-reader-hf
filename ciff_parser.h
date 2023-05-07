@@ -51,7 +51,7 @@ public:
             ifstream target_file_reader(this->path, std::ios::binary);
             this->buffer = new std::vector<unsigned char>(std::istreambuf_iterator<char>(target_file_reader), {});
         } else{
-            cout << "Parsing image from CAFF file... " << endl;
+            cout << "Parsing CIFF image from CAFF file... " << endl;
         }
         string line;
 
@@ -162,7 +162,6 @@ public:
         delete caption;
         tags->clear();
         delete tags;
-        //TODO: make file read a separate thing to make work it with CAFF
         return ret_value;
     }
 

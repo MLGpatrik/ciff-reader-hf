@@ -15,7 +15,7 @@ protected:
      * @param buffer The buffer which contains the binary file
      * @return Returns the magic
      */
-    std::string read_magic(std::vector<unsigned char> buffer);
+    std::string read_magic(std::vector<unsigned char> buffer,int from=0);
 
     /**
      * Reads the header from the given index to the count

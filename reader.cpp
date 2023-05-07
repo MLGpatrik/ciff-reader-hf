@@ -1,7 +1,7 @@
 #include <iostream>
 #include "parser.h"
 #include "ciff_parser.h"
-
+#include "caff_parser.h"
 
 #define MEMTRACE
 
@@ -45,25 +45,28 @@ int main(int argc, char *argv[]) {
         return -1;
     }
     string target_file_path = argv[2];
-    Parser* parser;
+    Parser* parser = NULL;
     if (input_string.compare("--ciff") == 0) {
         std::cout << "Converting CIFF to jpeg..." << std::endl;
         parser = new CIFF_parser(target_file_path);
-        int ret_val = parser->parse();
-        //delete parser; //TODO: uncomment this!
-        //TODO: remove memtrace
-        return ret_val;
     } else {
         if (input_string.compare("--caff") == 0) {
             std::cout << "Converting CAFF to jpeg" << std::endl;
+            parser = new CAFF_parser(target_file_path);
         } else {
             std::cout << "Not a valid parameter!" << std::endl;
             return -1;
         }
     }
 
+    if(parser != NULL){
+        int ret_val = parser->parse();
+        //delete parser; //TODO: uncomment this!
+        return ret_val;
+    }
+    return -1;
+    //TODO: remove memtrace
      //TODO: makefile -> name has tobe parser!!
      //TODO: Handle empty file, not existing file, smaller than magic files etc...
 
-    return -1;
 }
