@@ -41,7 +41,7 @@ Done!
 
 ## Informations
 
-Runs very slowly on macOS for some reason, but works great on linux and windows.
+Compatible with macOS Ventura and Ubuntu 22.04.
 
 Tested with:
 - Valgrind: No memory leaks found (log can be found [here](https://github.com/MLGpatrik/ciff-reader-hf/tree/main/docs/valgrind.log))
@@ -51,3 +51,6 @@ Used command:
 valgrind --leak-check=full --show-leak-kinds=all --log-file=valgrind.log -- /home/kali/ciff-reader-hf/parser --caff testfiles/1.caff 
 ```
 - Memtrace: No memory leaks found
+- afl-fuzz tested on both --caff and --ciff formats:
+  - [--caff](https://github.com/MLGpatrik/ciff-reader-hf/tree/main/docs/afl_fuzz_caff.log)
+  - [--ciff](https://github.com/MLGpatrik/ciff-reader-hf/tree/main/docs/afl_fuzz_ciff.log)

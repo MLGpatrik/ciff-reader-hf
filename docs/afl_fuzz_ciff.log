@@ -1,0 +1,29 @@
+            american fuzzy lop ++4.07a {default} (./parser) [fast]
+┌─ process timing ────────────────────────────────────┬─ overall results ────┐
+│        run time : 0 days, 0 hrs, 24 min, 3 sec      │  cycles done : 21    │
+│   last new find : 0 days, 0 hrs, 4 min, 58 sec      │ corpus count : 140   │
+│last saved crash : none seen yet                     │saved crashes : 0     │
+│ last saved hang : none seen yet                     │  saved hangs : 0     │
+├─ cycle progress ─────────────────────┬─ map coverage┴──────────────────────┤
+│  now processing : 85.26 (60.7%)      │    map density : 0.00% / 0.01%      │
+│  runs timed out : 0 (0.00%)          │ count coverage : 1.83 bits/tuple    │
+├─ stage progress ─────────────────────┼─ findings in depth ─────────────────┤
+│  now trying : havoc                  │ favored items : 57 (40.71%)         │
+│ stage execs : 5/114 (4.39%)          │  new edges on : 72 (51.43%)         │
+│ total execs : 906k                   │ total crashes : 0 (0 saved)         │
+│  exec speed : 677.3/sec              │  total tmouts : 2 (0 saved)         │
+├─ fuzzing strategy yields ────────────┴─────────────┬─ item geometry ───────┤
+│   bit flips : disabled (default, enable with -D)   │    levels : 6         │
+│  byte flips : disabled (default, enable with -D)   │   pending : 13        │
+│ arithmetics : disabled (default, enable with -D)   │  pend fav : 0         │
+│  known ints : disabled (default, enable with -D)   │ own finds : 139       │
+│  dictionary : n/a                                  │  imported : 0         │
+│havoc/splice : 104/311k, 35/560k                    │ stability : 100.00%   │
+│py/custom/rq : unused, unused, unused, unused       ├───────────────────────┘
+│    trim/eff : 6.46%/33.7k, disabled                │          [cpu001: 37%]
+└────────────────────────────────────────────────────┘
+
+
+The used command: sudo afl-fuzz -i ./testfiles/ciff/ -o afl_out/afl_out_ciff/ -- ./parser --ciff @@
+
+## Note:  afl_out/afl_out_ciff/ folder is not in the repo!

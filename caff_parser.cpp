@@ -14,6 +14,7 @@ int CAFF_parser::get_block_id(std::vector<unsigned char> buffer,int from){
     std::cout << "The ID: " << id << std::endl;
 
     if(id < 0 || 4 <= id){
+        std::cout << "Invalid ID!" << std::endl;
         throw std::out_of_range("Invalid ID");
     }
     return id;
@@ -93,7 +94,9 @@ int CAFF_parser::parse_block(std::vector<unsigned char> buffer, int (CAFF_parser
     try{
         data = get_block(buffer,next);
     }catch (std::out_of_range const&){
-        clear_buffer_pointer(data);
+        if(data != NULL) {
+            clear_buffer_pointer(data);
+        }
         buffer.clear();
         return -1;
     }

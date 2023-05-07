@@ -81,11 +81,16 @@ public:
             std::cerr << "Invalid file!" << std::endl;
             return -1;
         }
-        //TODO: Add try-catch at block reads: out-of-range
-        if (parse_block(buffer,&CAFF_parser::parse_caff_header) == -1){
-            return -1;
-        }
-        if(parse_block(buffer,&CAFF_parser::parse_credits) == -1){
+        try {
+            if (parse_block(buffer, &CAFF_parser::parse_caff_header) == -1) {
+                return -1;
+            }
+            if (parse_block(buffer, &CAFF_parser::parse_credits) == -1) {
+                return -1;
+            }
+        }catch (std::out_of_range const&){
+            buffer.clear();
+            std::cerr << "Invalid block(s), exiting...";
             return -1;
         }
 

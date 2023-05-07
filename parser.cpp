@@ -52,7 +52,9 @@ void Parser::print_progress(float progress,float max_progress){
 }
 
 void Parser::clear_buffer_pointer(std::vector<unsigned char>* buffer){
-    buffer->clear();
-    delete buffer;
-    buffer = NULL;
+    if(buffer != NULL) {
+        buffer->clear();
+        delete buffer;
+        buffer = NULL;
+    }
 }

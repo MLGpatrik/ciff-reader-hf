@@ -1,0 +1,28 @@
+            american fuzzy lop ++4.07a {default} (./parser) [fast]
+┌─ process timing ────────────────────────────────────┬─ overall results ────┐
+│        run time : 0 days, 0 hrs, 33 min, 24 sec     │  cycles done : 5     │
+│   last new find : 0 days, 0 hrs, 0 min, 5 sec       │ corpus count : 31    │
+│last saved crash : none seen yet                     │saved crashes : 0     │
+│ last saved hang : none seen yet                     │  saved hangs : 0     │
+├─ cycle progress ─────────────────────┬─ map coverage┴──────────────────────┤
+│  now processing : 30.1 (96.8%)       │    map density : 0.00% / 0.00%      │
+│  runs timed out : 1 (3.23%)          │ count coverage : 1.70 bits/tuple    │
+├─ stage progress ─────────────────────┼─ findings in depth ─────────────────┤
+│  now trying : trim 4096/4096         │ favored items : 9 (29.03%)          │
+│ stage execs : 64/108 (59.26%)        │  new edges on : 9 (29.03%)          │
+│ total execs : 71.2k                  │ total crashes : 0 (0 saved)         │
+│  exec speed : 56.74/sec (slow!)      │  total tmouts : 0 (0 saved)         │
+├─ fuzzing strategy yields ────────────┴─────────────┬─ item geometry ───────┤
+│   bit flips : disabled (default, enable with -D)   │    levels : 7         │
+│  byte flips : disabled (default, enable with -D)   │   pending : 15        │
+│ arithmetics : disabled (default, enable with -D)   │  pend fav : 1         │
+│  known ints : disabled (default, enable with -D)   │ own finds : 28        │
+│  dictionary : n/a                                  │  imported : 0         │
+│havoc/splice : 11/11.4k, 19/30.9k                   │ stability : 100.00%   │
+│py/custom/rq : unused, unused, unused, unused       ├───────────────────────┘
+│    trim/eff : 4.68%/28.6k, disabled                │          [cpu000: 50%]
+└────────────────────────────────────────────────────┘
+
+The used command: sudo afl-fuzz -i testfiles/caff/ -o test -t 300  -- ./parser --caff @@
+
+## Note: test folder is not in the repo!

@@ -46,16 +46,17 @@ public:
      */
     int write_jpeg_image(const char* filename, unsigned char* rgb_buffer, int width, int height);
 
-    int parse() override{
-        if(buffer == NULL){
+    int parse() override {
+
+        if (buffer == NULL) {
             cout << "Parsing the file: " << this->path << endl;
             ifstream target_file_reader(this->path, std::ios::binary);
             this->buffer = new std::vector<unsigned char>(std::istreambuf_iterator<char>(target_file_reader), {});
-        } else{
+        } else {
             cout << "Parsing CIFF image from CAFF file... " << endl;
         }
 
-        if(buffer->size() < 36){
+        if (buffer->size() < 36) {
             clear_buffer_pointer(buffer);
             std::cerr << "Invalid file!" << std::endl;
             return -1;
@@ -64,72 +65,75 @@ public:
         // Read MAGIC
         std::string magic = this->read_magic(*buffer);
         std::cout << "The MAGIC: " << magic << " ";
-        if(!(magic.compare("CIFF") == 0)){
+        if (!(magic.compare("CIFF") == 0)) {
             clear_buffer_pointer(buffer);
-            std::cout<< "Invalid file magic!" << std::endl;
+            std::cout << "Invalid file magic!" << std::endl;
             return -1;
         }
-        std::cout<< "Valid file magic!" << std::endl;
+        std::cout << "Valid file magic!" << std::endl;
         // Read header_size
 
-        std::vector<unsigned char>* header_size_vector = this->read_header(*buffer,4,8);
+        std::vector<unsigned char> *header_size_vector = this->read_header(*buffer, 4, 8);
         int header_size = this->ByteToInteger(*header_size_vector);
         clear_buffer_pointer(header_size_vector);
         std::cout << "Header size: " << header_size << std::endl;
-        if(header_size < 36 || (long unsigned int) header_size >= buffer->size()){
+        if (header_size < 36 || (long unsigned int) header_size >= buffer->size()) {
             clear_buffer_pointer(buffer);
             std::cerr << "Invalid header size!" << std::endl;
             return -1;
         }
 
         // Read content_size
-        std::vector<unsigned char>* cont_size_vec = this->read_header(*buffer,12,8);
+        std::vector<unsigned char> *cont_size_vec = this->read_header(*buffer, 12, 8);
         int content_size = this->ByteToInteger(*cont_size_vec);
         clear_buffer_pointer(cont_size_vec);
         std::cout << "The content size: " << content_size << std::endl;
-        if(content_size < 0){
+        if (content_size < 0) {
             clear_buffer_pointer(buffer);
             std::cerr << "Invalid content size!" << std::endl;
             return -1;
         }
 
         // Read width
-        std::vector<unsigned char>* width_vec = this->read_header(*buffer,20,8);
+        std::vector<unsigned char> *width_vec = this->read_header(*buffer, 20, 8);
         int image_width = this->ByteToInteger(*width_vec);
         clear_buffer_pointer(width_vec);
         std::cout << "The width: " << image_width << std::endl;
-        if(image_width < 0){
+        if (image_width < 0) {
             clear_buffer_pointer(buffer);
             std::cerr << "Invalid image width!" << std::endl;
             return -1;
         }
 
         // Read height
-        std::vector<unsigned char>* height_vec = this->read_header(*buffer,28,8);
+        std::vector<unsigned char> *height_vec = this->read_header(*buffer, 28, 8);
         int image_height = this->ByteToInteger(*height_vec);
         clear_buffer_pointer(height_vec);
         std::cout << "The height: " << image_height << std::endl;
-        if(image_height < 0){
+        if (image_height < 0) {
             clear_buffer_pointer(buffer);
             std::cerr << "Invalid image width!" << std::endl;
             return -1;
         }
 
-        if(!(content_size == 3*image_height*image_width)){
+        if (!(content_size == 3 * image_height * image_width)) {
             clear_buffer_pointer(buffer);
             std::cerr << "Content size doesn't match with dimensions!" << std::endl;
             return -1;
         }
 
         // Read caption
-        std::vector<unsigned char>* caption = this->read_header(*buffer,36,search_for_newline(*buffer,36));
+        std::vector<unsigned char> *caption = this->read_header(*buffer, 36, search_for_newline(*buffer, 36));
         caption->push_back('\0');
         std::cout << "The caption is: " << std::string(caption->begin(), caption->end()) << std::endl;
         // Read tags
 
-        std::vector<unsigned char>* tags = this->read_header(*buffer,(unsigned int)((unsigned int)36+caption->size()),(unsigned int)(header_size-(unsigned int)36-caption->size())); // +1 is the \n it's not in the caption vector
+        std::vector<unsigned char> *tags = this->read_header(*buffer,
+                                                             (unsigned int) ((unsigned int) 36 + caption->size()),
+                                                             (unsigned int) (header_size - (unsigned int) 36 -
+                                                                             caption->size())); // +1 is the \n it's not in the caption vector
         clear_buffer_pointer(caption);
-        std::replace(tags->begin(),tags->end(),'\0',',');
+        std::replace(tags->begin(), tags->end(), '\0', ',');
         tags->push_back('\0');
         std::cout << "Tags: " << std::string(tags->begin(), tags->end()) << std::endl;
         clear_buffer_pointer(tags);
@@ -137,26 +141,34 @@ public:
         // Allocate memory for the RGB buffer
         std::cout << "The size of the file is: " << buffer->size() << std::endl;
 
-        if((unsigned int)(header_size+content_size) > buffer->size()){
+        if ((unsigned int) (header_size + content_size) > buffer->size()) {
             std::cerr << "Header size + content size bigger than buffer size!" << std::endl;
             clear_buffer_pointer(buffer);
             return -1;
         }
 
-        std::vector<unsigned char>* rgb = read_header(*buffer,header_size,content_size);
+        std::vector<unsigned char> *rgb = read_header(*buffer, header_size, content_size);
 
         std::cout << "Writing to file..." << std::endl;
-        string filename = fs::path( this->path ).filename();
-        if((filename.find(string(".ciff")) != std::string::npos) || (filename.find(string(".caff")) != std::string::npos)){
-            filename.replace(filename.size()-4,4,"jpg");
-        }else{
+        string filename = fs::path(this->path).filename();
+        if(filename.empty() || rgb->empty()){
+            clear_buffer_pointer(buffer);
+            clear_buffer_pointer(rgb);
+            return -1;
+        }
+        if ((filename.find(string(".ciff")) != std::string::npos) ||
+            (filename.find(string(".caff")) != std::string::npos)) {
+            filename.replace(filename.size() - 4, 4, "jpg");
+        } else {
             filename.append(string(".jpg"));
         }
 
         int ret_value = write_jpeg_image(filename.c_str(), &(rgb->at(0)), image_width, image_height);
+
         clear_buffer_pointer(rgb);
         clear_buffer_pointer(buffer);
         return ret_value;
+
     }
 
 };
