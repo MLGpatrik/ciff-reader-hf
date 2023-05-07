@@ -1,9 +1,20 @@
-	 ______     ______     ______   ______   ______     ______
-	/\  ___\   /\  __ \   /\  ___\ /\  ___\ /\  ___\   /\  == \
-	\ \ \____  \ \  __ \  \ \  __\ \ \  __\ \ \  __\   \ \  __<
-	 \ \_____\  \ \_\ \_\  \ \_\    \ \_\    \ \_____\  \ \_\ \_\
-	  \/_____/   \/_/\/_/   \/_/     \/_/     \/_____/   \/_/ /_/
-	  
+
+    ➜  ciff-reader-hf git:(main) ✗ ./parser --help
+    
+     ______     ______     ______   ______   ______     ______
+    /\  ___\   /\  __ \   /\  ___\ /\  ___\ /\  ___\   /\  == \
+    \ \ \____  \ \  __ \  \ \  __\ \ \  __\ \ \  __\   \ \  __<
+     \ \_____\  \ \_\ \_\  \ \_\    \ \_\    \ \_____\  \ \_\ \_\
+      \/_____/   \/_/\/_/   \/_/     \/_/     \/_____/   \/_/ /_/
+    
+    CAFFER: Crysys CAFF and CIFF converter
+    usage: reader [--ciff | --caff] [target_file]
+    
+        Command Summary:
+    
+            --ciff target_file 	|	Read CIFF target_file and exports it to a JPEG file
+            --caff target_file 	|	Read CAFF target_file and exports the first image to a JPEG file
+            --help 			|	This help message
 
 
 
@@ -29,23 +40,6 @@ make
 Done!
 
 ## Usage
-
-    ➜  ciff-reader-hf git:(main) ✗ ./parser --help
-    
-     ______     ______     ______   ______   ______     ______
-    /\  ___\   /\  __ \   /\  ___\ /\  ___\ /\  ___\   /\  == \
-    \ \ \____  \ \  __ \  \ \  __\ \ \  __\ \ \  __\   \ \  __<
-     \ \_____\  \ \_\ \_\  \ \_\    \ \_\    \ \_____\  \ \_\ \_\
-      \/_____/   \/_/\/_/   \/_/     \/_/     \/_____/   \/_/ /_/
-    
-    CAFFER: Crysys CAFF and CIFF converter
-    usage: reader [--ciff | --caff] [target_file]
-    
-        Command Summary:
-    
-            --ciff target_file 	|	Read CIFF target_file and exports it to a JPEG file
-            --caff target_file 	|	Read CAFF target_file and exports the first image to a JPEG file
-            --help 			|	This help message
 
 ## Informations
 
