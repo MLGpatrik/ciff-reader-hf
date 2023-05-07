@@ -129,33 +129,22 @@ public:
 
         std::vector<unsigned char>* tags = this->read_header(*buffer,(unsigned int)((unsigned int)36+caption->size()),(unsigned int)(header_size-(unsigned int)36-caption->size())); // +1 is the \n it's not in the caption vector
         clear_buffer_pointer(caption);
+        std::replace(tags->begin(),tags->end(),'\0',',');
+        tags->push_back('\0');
         std::cout << "Tags: " << std::string(tags->begin(), tags->end()) << std::endl;
         clear_buffer_pointer(tags);
 
         // Allocate memory for the RGB buffer
         std::cout << "The size of the file is: " << buffer->size() << std::endl;
 
-        unsigned char* rgb_buffer = new unsigned char[image_width * image_height * 3];
-
-        int y = 0;
-        for (int x = 0; x < image_width; ++x) {
-            int index = (y * image_width + x) * 3;
-            if(image_width * image_height * 3 < index){
-                delete[] rgb_buffer;
-                rgb_buffer = NULL;
-                clear_buffer_pointer(buffer);
-                return -1;
-            }
-            std::vector<unsigned char>* color_at_position = this->read_RGB_value(*buffer,x,y,image_width,header_size);
-            rgb_buffer[index] = color_at_position->at(0);
-            rgb_buffer[index + 1] = color_at_position->at(1);
-            rgb_buffer[index + 2] = color_at_position->at(2);
-            print_progress((float)x,(float)image_width);
-            delete color_at_position;
+        if((unsigned int)(header_size+content_size) > buffer->size()){
+            std::cerr << "Header size + content size bigger than buffer size!" << std::endl;
+            clear_buffer_pointer(buffer);
+            return -1;
         }
-        print_progress((float)image_width,(float)image_width);
 
-        std::cout << std::endl;
+        std::vector<unsigned char>* rgb = read_header(*buffer,header_size,content_size);
+
         std::cout << "Writing to file..." << std::endl;
         string filename = fs::path( this->path ).filename();
         if((filename.find(string(".ciff")) != std::string::npos) || (filename.find(string(".caff")) != std::string::npos)){
@@ -164,10 +153,7 @@ public:
             filename.append(string(".jpg"));
         }
 
-        int ret_value = write_jpeg_image(filename.c_str(), rgb_buffer, image_width, image_height);
-
-        delete[] rgb_buffer;
-        rgb_buffer = NULL;
+        int ret_value = write_jpeg_image(filename.c_str(), &(rgb->at(0)), image_width, image_height);
         clear_buffer_pointer(buffer);
         return ret_value;
     }
