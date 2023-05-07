@@ -154,6 +154,7 @@ public:
         }
 
         int ret_value = write_jpeg_image(filename.c_str(), &(rgb->at(0)), image_width, image_height);
+        clear_buffer_pointer(rgb);
         clear_buffer_pointer(buffer);
         return ret_value;
     }

@@ -42,3 +42,12 @@ Done!
 ## Informations
 
 Runs very slowly on macOS for some reason, but works great on linux and windows.
+
+Tested with:
+- Valgrind: No memory leaks found (log can be found [here](https://github.com/MLGpatrik/ciff-reader-hf/tree/main/docs/valgrind.log))
+```
+Used command:
+
+valgrind --leak-check=full --show-leak-kinds=all --log-file=valgrind.log -- /home/kali/ciff-reader-hf/parser --caff testfiles/1.caff 
+```
+- Memtrace: No memory leaks found
