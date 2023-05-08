@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
         string input_string = argv[1];
         if (argc == 2) {
             if (input_string.compare("--help") == 0) {
-                std::cout << "CAFFER: CrySyS CAFF and CIFF converter" << std::endl;
+                std::cout << "CAFFER: CrySyS CAFF and CIFF parser" << std::endl;
                 std::cout << "Usage: reader [--ciff | --caff] [target_file]" << std::endl << std::endl;
                 std::cout << "\tCommand Summary:" << std::endl << std::endl;
                 std::cout << "\t\t--ciff target_file \t|\tRead CIFF target_file and exports it to a JPEG file"
