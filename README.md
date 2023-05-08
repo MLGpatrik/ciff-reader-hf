@@ -7,8 +7,8 @@
      \ \_____\  \ \_\ \_\  \ \_\    \ \_\    \ \_____\  \ \_\ \_\
       \/_____/   \/_/\/_/   \/_/     \/_/     \/_____/   \/_/ /_/
     
-    CAFFER: Crysys CAFF and CIFF converter
-    usage: reader [--ciff | --caff] [target_file]
+    CAFFER: CrySyS CAFF and CIFF converter
+    Usage: reader [--ciff | --caff] [target_file]
     
         Command Summary:
     
