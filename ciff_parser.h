@@ -127,6 +127,12 @@ public:
         caption->push_back('\0');
         std::cout << "The caption is: " << std::string(caption->begin(), caption->end()) << std::endl;
         // Read tags
+        if(buffer->size() < (unsigned int)36 + caption->size()){
+            std::cerr << "Header + caption size is bigger than buffer!";
+            clear_buffer_pointer(caption);
+            clear_buffer_pointer(buffer);
+            return -1;
+        }
 
         std::vector<unsigned char> *tags = this->read_header(*buffer,
                                                              (unsigned int) ((unsigned int) 36 + caption->size()),
