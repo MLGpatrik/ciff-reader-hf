@@ -67,7 +67,7 @@ public:
         std::cout << "The MAGIC: " << magic << " ";
         if (!(magic.compare("CIFF") == 0)) {
             clear_buffer_pointer(buffer);
-            std::cout << "Invalid file magic!" << std::endl;
+            std::cerr << "Invalid file magic!" << std::endl;
             return -1;
         }
         std::cout << "Valid file magic!" << std::endl;

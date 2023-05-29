@@ -14,7 +14,7 @@ int CAFF_parser::get_block_id(std::vector<unsigned char> buffer,int from){
     std::cout << "The ID: " << id << std::endl;
 
     if(id < 0 || 4 <= id){
-        std::cout << "Invalid ID!" << std::endl;
+        std::cerr << "Invalid ID!" << std::endl;
         throw std::out_of_range("Invalid ID");
     }
     return id;
@@ -43,7 +43,7 @@ int CAFF_parser::parse_caff_header(std::vector<unsigned char> buffer){
     std::string magic = read_magic(buffer);
     std::cout << "The MAGIC: " << magic << " ";
     if(!(magic.compare("CAFF") == 0)){
-        std::cout<< "Invalid file magic!" << std::endl;
+        std::cerr<< "Invalid file magic!" << std::endl;
         return -1;
     }
     std::cout<< "Valid file magic!" << std::endl;
